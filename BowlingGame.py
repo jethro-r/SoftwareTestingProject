@@ -1,39 +1,42 @@
 #File 2 (BowlingGame.py)
-#This file has information about Bowling Game for which the description is provided in project assessment.
 
 class BowlingGame:
+  # initial game variables
   def __init__(self):
     self.rolls = []
 
-  def roll(self,pins):
-    self.rolls.append(pins)
+  # function to add the number of pins hit in a roll to list
+  def roll(self, pins_hit):
+    self.rolls.append(pins_hit)
 
+  # score function that works out frames and bonus scoring rolls
   def score(self):
     result = 0
-    rollIndex = 0
-    for frameIndex in range(10):
-      if self.isStrike(rollIndex):
-        result += self.strikeScore(rollIndex)
-        rollIndex += 1
-      elif self.isSpare(rollIndex):
-        result += self.spareScore(rollIndex)
-        rollIndex += 2
+    roll_index = 0 # roll index is track which roll the system is at. 
+    for frame_index in range(10):
+      if self.is_strike(roll_index):
+        result += self.bonus_rolls_score(roll_index)
+        roll_index += 1 # +1 because there is no second shot, so next number in list will be the next frame
+      elif self.is_spare(roll_index):
+        result += self.bonus_rolls_score(roll_index)
+        roll_index += 2 # +2 because 'isSpare()' has checked for spare already, so no need to go to next number
       else:
-        result += self.frameScore(rollIndex)
-        rollIndex += 2
+        result += self.frame_score(roll_index)
+        roll_index += 2
     return result
 
-  def isStrike(self, rollIndex):
-    return self.rolls[rollIndex] == 10
+  # checks if Number of pins hit is 10, if so it counts as a strike
+  def is_strike(self, roll_index):
+    return self.rolls[roll_index] == 10
   
-  def isSpare(self, rollIndex):
-    return self.rolls[rollIndex] + self.rolls[rollIndex + 1] == 10
+  # checks if Number of pins over two rolls is 10, if so it counts as a spare
+  def is_spare(self, roll_index):
+    return self.rolls[roll_index] + self.rolls[roll_index + 1] == 10
   
-  def strikeScore(self,rollIndex):
-    return self.rolls[rollIndex] + self.rolls[rollIndex + 1] + self.rolls[rollIndex + 2]
+  # both Strikes and Spares have the same scoring system, so merged both into a function that gets the next two scores to get the total for that frame
+  def bonus_rolls_score(self, roll_index):
+    return self.rolls[roll_index] + self.rolls[roll_index + 1] + self.rolls[roll_index + 2]
 
-  def spareScore(self,rollIndex):
-    return self.rolls[rollIndex] + self.rolls[rollIndex + 1] + self.rolls[rollIndex + 2]
-
-  def frameScore(self, rollIndex):
-    return self.rolls[rollIndex] + self.rolls[rollIndex + 1]
+  # normal frame scoring, first plus second rolls = score for frame
+  def frame_score(self, roll_index):
+    return self.rolls[roll_index] + self.rolls[roll_index + 1]
